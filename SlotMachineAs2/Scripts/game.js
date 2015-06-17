@@ -21,6 +21,9 @@ var manifest = [
     { id: "spin", src: "img/spin.png" },
     { id: "plus", src: "img/plus.png" },
     { id: "minus", src: "img/minus.png" },
+    { id: "start", src: "img/start.png" },
+    { id: "reset", src: "img/reset.png" },
+    { id: "quit", src: "img/quit.png" },
     { id: "slotwav", src: "sound/slots.wav" }
 ];
 var imgs = ["7s", "bar", "bell", "cherry", "lemon", "orange", "plum"];
@@ -35,19 +38,22 @@ var slot2;
 var slot3;
 var spinAnim = 0;
 var spinAnimm = false;
-var cash = 70;
+var cash = 500;
 var bet = 5;
 var payout = 0;
 var slotsVal = ["7s", "7s", "7s"];
 var btnPlus;
 var btnMinus;
+var btnStart;
+var btnReset;
+var btnQuit;
 function init() {
     stage = new createjs.Stage(canvas);
     stage.enableMouseOver(20);
     createjs.Ticker.setFPS(60);
     createjs.Ticker.on("tick", gameloop);
     setupStats();
-    main();
+    menu();
 }
 function setupStats() {
     stat = new Stats();
@@ -70,6 +76,32 @@ function gameloop() {
     stage.update();
     stat.end();
 }
+function menu() {
+    stage.removeAllChildren(); // Clear the screen for the menu
+    //Menu Text
+    var menuText;
+    menuText = new createjs.Text("Welcome To Super7Slots", "38px Consolas", "#000000");
+    menuText.x = 5;
+    menuText.y = 100;
+    stage.addChild(menuText);
+    // Menu 'Start' button
+    btnStart = new createjs.Bitmap(assets.getResult("start"));
+    btnStart.x = canvas.clientWidth / 2 - btnStart.getBounds().width / 2;
+    btnStart.y = 250;
+    btnStart.on("click", btnStart_Click);
+    btnStart.on("mouseover", btnStart_Mover);
+    btnStart.on("mouseout", btnStart_Mout);
+    stage.addChild(btnStart);
+}
+function btnStart_Click() {
+    main();
+}
+function btnStart_Mout() {
+    btnStart.alpha = 1.0;
+}
+function btnStart_Mover() {
+    btnStart.alpha = 0.7;
+}
 function main() {
     stage.removeAllChildren();
     // Draw slot machine first
@@ -77,7 +109,7 @@ function main() {
     stage.addChild(imgSlotMachine);
     // Draw text items
     addTextitems();
-    // Draw Bet changign buttons
+    // Draw Bet changing buttons
     btnPlus = new createjs.Bitmap(assets.getResult("plus"));
     btnPlus.x = 250;
     btnPlus.y = imgSlotMachine.getBounds().height - 135;
@@ -117,6 +149,7 @@ function main() {
     slot3.y = 85;
     slot3.scaleX = slot3.scaleY = Math.min(125 / slot3.image.width, 125 / slot3.image.height);
     stage.addChild(slot3);
+    // ANimation check
     if (spinAnim > 45) {
         spinAnim = 0;
         spinAnimm = false;
@@ -131,6 +164,21 @@ function addBtnSpin() {
     btnSpin.on("mouseover", btnSpin_Mover);
     btnSpin.on("mouseout", btnSpin_Mout);
     stage.addChild(btnSpin);
+    // Add Reset && Quit button
+    btnReset = new createjs.Bitmap(assets.getResult("reset"));
+    btnReset.x = 100;
+    btnReset.y = imgSlotMachine.getBounds().height + 10;
+    btnReset.on("click", btnReset_Click);
+    btnReset.on("mouseover", btnReset_Mover);
+    btnReset.on("mouseout", btnReset_Mout);
+    stage.addChild(btnReset);
+    btnQuit = new createjs.Bitmap(assets.getResult("quit"));
+    btnQuit.x = 0;
+    btnQuit.y = imgSlotMachine.getBounds().height + 10;
+    btnQuit.on("click", btnQuit_Click);
+    btnQuit.on("mouseover", btnQuit_Mover);
+    btnQuit.on("mouseout", btnQuit_Mout);
+    stage.addChild(btnQuit);
 }
 function addTextitems() {
     stage.removeChild(lblCash);
@@ -157,6 +205,7 @@ function CheckWin() {
     if (cash >= bet)
         addBtnSpin();
     if (slotsVal[0] == slotsVal[1] && slotsVal[0] == slotsVal[2]) {
+        window.alert("WINNER!!");
         // JACKPOT is three 7's
         if (slotsVal[0] == "7s") {
             cash = cash + payout;
@@ -218,5 +267,29 @@ function btnPlus_Click() {
     stage.removeChild(btnSpin);
     if (cash >= bet)
         addBtnSpin();
+}
+function btnReset_Click() {
+    cash = 500;
+    bet = 5;
+    payout = 0;
+    main();
+}
+function btnReset_Mover() {
+    btnReset.alpha = 0.7;
+}
+function btnReset_Mout() {
+    btnReset.alpha = 1.0;
+}
+function btnQuit_Click() {
+    cash = 500;
+    bet = 5;
+    payout = 0;
+    menu();
+}
+function btnQuit_Mover() {
+    btnQuit.alpha = 0.7;
+}
+function btnQuit_Mout() {
+    btnQuit.alpha = 1.0;
 }
 //# sourceMappingURL=game.js.map
