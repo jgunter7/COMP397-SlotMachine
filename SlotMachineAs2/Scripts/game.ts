@@ -77,6 +77,53 @@ function main() {
     // Draw slot machine first
     imgSlotMachine = new createjs.Bitmap(assets.getResult("slots"));
     stage.addChild(imgSlotMachine);
+    // Draw text items
+    addTextitems();
+    // Draw Slot Spin button
+    if (!spinAnimm) {
+        addBtnSpin();
+    }
+    //
+    spinAnim++;
+    // Draw Slot P1
+    slot1 = new createjs.Bitmap(assets.getResult(imgs[Math.floor(Math.random() * 7) + 1]));
+    slot1.x = 37;
+    slot1.y = 85;
+    slot1.scaleX = slot1.scaleY = Math.min(125 / slot1.image.width, 125 / slot1.image.height);
+    stage.addChild(slot1);
+    // Draw Slot P2
+    slot2 = new createjs.Bitmap(assets.getResult(imgs[Math.floor(Math.random() * 7) + 1]));
+    slot2.x = 190;
+    slot2.y = 85;
+    slot2.scaleX = slot2.scaleY = Math.min(125 / slot2.image.width, 125 / slot2.image.height);
+    stage.addChild(slot2);
+    // Draw Slot P3
+    slot3 = new createjs.Bitmap(assets.getResult(imgs[Math.floor(Math.random() * 7) + 1]));
+    slot3.x = 340;
+    slot3.y = 85;
+    slot3.scaleX = slot3.scaleY = Math.min(125 / slot3.image.width, 125 / slot3.image.height);
+    stage.addChild(slot3);
+    if (spinAnim > 120) {
+        spinAnim = 0;
+        spinAnimm = false;
+        CheckWin();
+    }
+}
+
+function addBtnSpin() {
+    btnSpin = new createjs.Bitmap(assets.getResult("spin"));
+    btnSpin.x = canvas.clientWidth / 2 - 50;
+    btnSpin.y = imgSlotMachine.getBounds().height + 10;
+    btnSpin.on("click", btnSpin_Click);
+    btnSpin.on("mouseover", btnSpin_Mover);
+    btnSpin.on("mouseout", btnSpin_Mout);
+    stage.addChild(btnSpin);
+}
+
+function addTextitems() {
+    stage.removeChild(lblCash);
+    stage.removeChild(lblBet);
+    stage.removeChild(lblPayout);
     // Draw Cash label
     lblCash = new createjs.Text("$" + cash.toString(), "30px Consolas", "#00FF00");
     lblCash.x = 40;
@@ -92,47 +139,20 @@ function main() {
     lblPayout.x = 315;
     lblPayout.y = imgSlotMachine.getBounds().height - 88;
     stage.addChild(lblPayout);
-    // Draw Slot Spin button
-    btnSpin = new createjs.Bitmap(assets.getResult("spin"));
-    btnSpin.x = canvas.clientWidth/2 - 50;
-    btnSpin.y = imgSlotMachine.getBounds().height + 10;
-    btnSpin.on("click", btnSpin_Click);
-    btnSpin.on("mouseover", btnSpin_Mover);
-    btnSpin.on("mouseout", btnSpin_Mout);
-    stage.addChild(btnSpin);
-    //
-    spinAnim++;
-    // Draw Slot P1
-    slot1 = new createjs.Bitmap(assets.getResult(imgs[Math.floor(Math.random() * 7) + 1].toString()));
-    slot1.x = 37;
-    slot1.y = 85;
-    slot1.scaleX = slot1.scaleY = Math.min(125 / slot1.image.width, 125 / slot1.image.height);
-    stage.addChild(slot1);
-    // Draw Slot P2
-    slot2 = new createjs.Bitmap(assets.getResult(imgs[Math.floor(Math.random() * 7) + 1].toString()));
-    slot2.x = 190;
-    slot2.y = 85;
-    slot2.scaleX = slot2.scaleY = Math.min(125 / slot2.image.width, 125 / slot2.image.height);
-    stage.addChild(slot2);
-    // Draw Slot P3
-    slot3 = new createjs.Bitmap(assets.getResult(imgs[Math.floor(Math.random() * 7) + 1].toString()));
-    slot3.x = 340;
-    slot3.y = 85;
-    slot3.scaleX = slot3.scaleY = Math.min(125 / slot3.image.width, 125 / slot3.image.height);
-    stage.addChild(slot3);
-    if (spinAnim > 120) {
-        spinAnim = 0;
-        spinAnimm = false;
-        CheckWin();
-    }
 }
 
 function CheckWin() {
-
+    // Check if anything needs to be payed out
+    addBtnSpin();
+    payout = 500;
+    bet = 5;
+    cash = (cash - bet) + payout;
+    addTextitems();
 }
 
 function btnSpin_Click() {
     createjs.Sound.play("slotwav");
+    stage.removeChild(btnSpin);
     // Do all calcs call main to rest the view
     spinAnimm = true;
     main();

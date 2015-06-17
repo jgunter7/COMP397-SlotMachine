@@ -4,3 +4,9 @@ C:\Users\Jason\Desktop\College\Sem4\Programming3\SlotMachineAs2\SlotMachineAs2\b
 C:\Users\Jason\Desktop\College\Sem4\Programming3\SlotMachineAs2\SlotMachineAs2\obj\Debug\SlotMachineAs2.csprojResolveAssemblyReference.cache
 C:\Users\Jason\Desktop\College\Sem4\Programming3\SlotMachineAs2\SlotMachineAs2\obj\Debug\SlotMachineAs2.dll
 C:\Users\Jason\Desktop\College\Sem4\Programming3\SlotMachineAs2\SlotMachineAs2\obj\Debug\SlotMachineAs2.pdb
+C:\Users\Jason\Desktop\GIT\COMP397-SlotMachine\COMP397-SlotMachine\SlotMachineAs2\bin\SlotMachineAs2.dll.config
+C:\Users\Jason\Desktop\GIT\COMP397-SlotMachine\COMP397-SlotMachine\SlotMachineAs2\bin\SlotMachineAs2.dll
+C:\Users\Jason\Desktop\GIT\COMP397-SlotMachine\COMP397-SlotMachine\SlotMachineAs2\bin\SlotMachineAs2.pdb
+C:\Users\Jason\Desktop\GIT\COMP397-SlotMachine\COMP397-SlotMachine\SlotMachineAs2\obj\Debug\SlotMachineAs2.csprojResolveAssemblyReference.cache
+C:\Users\Jason\Desktop\GIT\COMP397-SlotMachine\COMP397-SlotMachine\SlotMachineAs2\obj\Debug\SlotMachineAs2.dll
+C:\Users\Jason\Desktop\GIT\COMP397-SlotMachine\COMP397-SlotMachine\SlotMachineAs2\obj\Debug\SlotMachineAs2.pdb
