@@ -65,8 +65,10 @@
     <Content Include="img\bell.png" />
     <Content Include="img\cherrys.png" />
     <Content Include="img\lemon.png" />
+    <Content Include="img\minus.png" />
     <Content Include="img\orange.png" />
     <Content Include="img\plum.png" />
+    <Content Include="img\plus.png" />
     <Content Include="img\slots.png" />
     <Content Include="img\spin.png" />
     <Content Include="packages.config" />

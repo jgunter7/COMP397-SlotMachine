@@ -19,6 +19,8 @@ var manifest = [
     { id: "plum", src: "img/plum.png" },
     { id: "slots", src: "img/slots.png" },
     { id: "spin", src: "img/spin.png" },
+    { id: "plus", src: "img/plus.png" },
+    { id: "minus", src: "img/minus.png" },
     { id: "slotwav", src: "sound/slots.wav" }
 ];
 var imgs = ["7s", "bar", "bell", "cherry", "lemon", "orange", "plum"];
@@ -33,9 +35,12 @@ var slot2;
 var slot3;
 var spinAnim = 0;
 var spinAnimm = false;
-var cash = 500;
+var cash = 70;
 var bet = 5;
 var payout = 0;
+var slotsVal = ["7s", "7s", "7s"];
+var btnPlus;
+var btnMinus;
 function init() {
     stage = new createjs.Stage(canvas);
     stage.enableMouseOver(20);
@@ -72,31 +77,47 @@ function main() {
     stage.addChild(imgSlotMachine);
     // Draw text items
     addTextitems();
+    // Draw Bet changign buttons
+    btnPlus = new createjs.Bitmap(assets.getResult("plus"));
+    btnPlus.x = 250;
+    btnPlus.y = imgSlotMachine.getBounds().height - 135;
+    btnPlus.scaleX = btnPlus.scaleY = Math.min(25 / btnPlus.image.width, 25 / btnPlus.image.height);
+    btnPlus.on("click", btnPlus_Click);
+    stage.addChild(btnPlus);
+    btnMinus = new createjs.Bitmap(assets.getResult("minus"));
+    btnMinus.x = 220;
+    btnMinus.y = imgSlotMachine.getBounds().height - 135;
+    btnMinus.scaleX = btnMinus.scaleY = Math.min(25 / btnMinus.image.width, 25 / btnMinus.image.height);
+    btnMinus.on("click", btnMinus_Click);
+    stage.addChild(btnMinus);
     // Draw Slot Spin button
-    if (!spinAnimm) {
+    if (!spinAnimm && cash >= bet) {
         addBtnSpin();
     }
     //
     spinAnim++;
     // Draw Slot P1
-    slot1 = new createjs.Bitmap(assets.getResult(imgs[Math.floor(Math.random() * 7) + 1]));
+    slotsVal[0] = imgs[Math.floor(Math.random() * 7) + 1];
+    slot1 = new createjs.Bitmap(assets.getResult(slotsVal[0]));
     slot1.x = 37;
     slot1.y = 85;
     slot1.scaleX = slot1.scaleY = Math.min(125 / slot1.image.width, 125 / slot1.image.height);
     stage.addChild(slot1);
     // Draw Slot P2
-    slot2 = new createjs.Bitmap(assets.getResult(imgs[Math.floor(Math.random() * 7) + 1]));
+    slotsVal[1] = imgs[Math.floor(Math.random() * 7) + 1];
+    slot2 = new createjs.Bitmap(assets.getResult(slotsVal[1]));
     slot2.x = 190;
     slot2.y = 85;
     slot2.scaleX = slot2.scaleY = Math.min(125 / slot2.image.width, 125 / slot2.image.height);
     stage.addChild(slot2);
     // Draw Slot P3
-    slot3 = new createjs.Bitmap(assets.getResult(imgs[Math.floor(Math.random() * 7) + 1]));
+    slotsVal[2] = imgs[Math.floor(Math.random() * 7)];
+    slot3 = new createjs.Bitmap(assets.getResult(slotsVal[2]));
     slot3.x = 340;
     slot3.y = 85;
     slot3.scaleX = slot3.scaleY = Math.min(125 / slot3.image.width, 125 / slot3.image.height);
     stage.addChild(slot3);
-    if (spinAnim > 120) {
+    if (spinAnim > 45) {
         spinAnim = 0;
         spinAnimm = false;
         CheckWin();
@@ -133,15 +154,45 @@ function addTextitems() {
 }
 function CheckWin() {
     // Check if anything needs to be payed out
-    addBtnSpin();
-    payout = 500;
-    bet = 5;
-    cash = (cash - bet) + payout;
+    if (cash >= bet)
+        addBtnSpin();
+    if (slotsVal[0] == slotsVal[1] && slotsVal[0] == slotsVal[2]) {
+        // JACKPOT is three 7's
+        if (slotsVal[0] == "7s") {
+            cash = cash + payout;
+            payout = 0;
+        }
+        else {
+            cash = cash + Math.floor(payout * 0.25);
+            payout = payout - Math.floor(payout * 0.25);
+        }
+    }
     addTextitems();
 }
 function btnSpin_Click() {
     createjs.Sound.play("slotwav");
     stage.removeChild(btnSpin);
+    cash = cash - bet;
+    switch (bet) {
+        case 5:
+            payout += 150;
+            break;
+        case 10:
+            payout += 200;
+            break;
+        case 15:
+            payout += 250;
+            break;
+        case 20:
+            payout += 300;
+            break;
+        case 25:
+            payout += 350;
+            break;
+    }
+    if (payout > 10000)
+        payout = 10000; // Max Jackpot size - all extra funds go to the house ;)
+    addTextitems();
     // Do all calcs call main to rest the view
     spinAnimm = true;
     main();
@@ -151,5 +202,21 @@ function btnSpin_Mover() {
 }
 function btnSpin_Mout() {
     btnSpin.alpha = 1.0;
+}
+function btnMinus_Click() {
+    if (bet > 5)
+        bet -= 5;
+    addTextitems();
+    stage.removeChild(btnSpin);
+    if (cash >= bet)
+        addBtnSpin();
+}
+function btnPlus_Click() {
+    if (bet < 25)
+        bet += 5;
+    addTextitems();
+    stage.removeChild(btnSpin);
+    if (cash >= bet)
+        addBtnSpin();
 }
 //# sourceMappingURL=game.js.map
